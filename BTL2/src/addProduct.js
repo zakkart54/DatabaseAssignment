@@ -6,11 +6,10 @@ const AddProduct = () => {
 const navigate = useNavigate();
 const [successMessage, setSuccessMessage] = useState('');
 const [formData, setFormData] = useState({
-  TEN_SAN_PHAM: '',
-  GIA_CA: '',
-  MO_TA: '',
-  LOAI_SAN_PHAM: '',
-  TINH_TRANG: '',
+  Ten_san_pham: '',
+  Gia_ca: '',
+  Mo_ta_san_pham: '',
+  Tinh_trang: '',
 });
 
 const handleChange = (e) => {
@@ -58,7 +57,7 @@ const handleSubmit = async (e) => {
             <div class="mb-5">
                 <label  class="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tên sản phẩm</label>
                 <input  
-                  name="TEN_SAN_PHAM"
+                  name="Ten_san_pham"
                   type="text"
                   class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"  
                   required 
@@ -69,7 +68,7 @@ const handleSubmit = async (e) => {
                 <input   
                   class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" 
                   required
-                  name="GIA_CA"
+                  name="Gia_ca"
                   type="number"
                   onChange={handleChange}/>
             </div>
@@ -78,16 +77,7 @@ const handleSubmit = async (e) => {
                 <input  
                   class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" 
                   required
-                  name="MO_TA"
-                  type="text"
-                  onChange={handleChange}/>
-            </div>
-            <div class="mb-5">
-                <label  class="text-left block mb-2 text-sm font-medium text-gray-900 dark:text-white">Loại sản phẩm</label>
-                <input  
-                  class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" 
-                  required
-                  name="LOAI_SAN_PHAM"
+                  name="Mo_ta_san_pham"
                   type="text"
                   onChange={handleChange}/>
             </div>
@@ -96,7 +86,7 @@ const handleSubmit = async (e) => {
                 <input  
                   class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" 
                   required
-                  name="TINH_TRANG"
+                  name="Tinh_trang"
                   type="text"
                   onChange={handleChange}/>
             </div>

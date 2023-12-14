@@ -2,11 +2,21 @@ const config = require('./dbConfig'),
       sql    = require('mssql');
 
 
-const getitemdata = async() =>{
+const getitemdata = async(data) =>{
     try {
         let pool = await sql.connect(config);
-        let result = await pool.query('SELECT * FROM SAN_PHAM');
-        return result
+        // let result = await pool
+        // .input('nid', sql.Int, data)
+        // .query(
+        //     `
+        //     SELECT San_pham.*
+        //     FROM San_pham
+        //     JOIN Ban ON San_pham.Ma_san_pham = Ban.Ma_san_pham_BAN
+        //     WHERE Ban.Ma_nguoi_dung_BAN = @nid;
+        //     `   
+        //     );
+         let result = await pool.query( 'Select * from San_pham');
+         return result
     }
     catch(e){
         console.log(e)
@@ -17,12 +27,11 @@ const additem = async(formData) =>{
     try {
         let pool = await sql.connect(config);
         await pool.request()
-            .input('TEN_SAN_PHAM', sql.NVarChar(50), formData.TEN_SAN_PHAM)
-            .input('GIA_CA', sql.Decimal(12, 2), formData.GIA_CA)
-            .input('MO_TA', sql.NVarChar(100), formData.MO_TA)
-            .input('LOAI_SAN_PHAM', sql.NVarChar(100), formData.LOAI_SAN_PHAM)
-            .input('TINH_TRANG', sql.Bit, formData.TINH_TRANG)
-            .query('INSERT INTO SAN_PHAM (TEN_SAN_PHAM, GIA_CA, MO_TA, LOAI_SAN_PHAM, TINH_TRANG) VALUES (@TEN_SAN_PHAM, @GIA_CA, @MO_TA, @LOAI_SAN_PHAM, @TINH_TRANG)');
+            .input('Ten_san_pham', sql.NVarChar(50), formData.Ten_san_pham)
+            .input('Gia_ca', sql.Decimal(12, 2), formData.Gia_ca)
+            .input('Mo_ta_san_pham', sql.NVarChar(100), formData.Mo_ta_san_pham)
+            .input('Tinh_trang', sql.Bit, formData.Tinh_trang)
+            .query('INSERT INTO San_pham (Ten_san_pham, Gia_ca, Mo_ta_san_pham, Tinh_trang) VALUES (@Ten_san_pham, @Gia_ca, @Mo_ta_san_pham, @Tinh_trang)');
     } catch (e) {
         console.log(e);
     }
@@ -30,25 +39,71 @@ const additem = async(formData) =>{
 const updateitem = async(formData) =>{
     try {
         let pool = await sql.connect(config);
-        await pool.request()
-            .input('MA_SAN_PHAM', sql.Int, formData.MA_SAN_PHAM)
-            .input('TEN_SAN_PHAM', sql.NVarChar(50), formData.TEN_SAN_PHAM)
-            .input('GIA_CA', sql.Decimal(12, 2), formData.GIA_CA)
-            .input('MO_TA', sql.NVarChar(100), formData.MO_TA)
-            .input('LOAI_SAN_PHAM', sql.NVarChar(100), formData.LOAI_SAN_PHAM)
-            .input('TINH_TRANG', sql.Bit, formData.TINH_TRANG)
+        pool.request()
+            .input('Ma_san_pham', sql.Int, formData.Ma_san_pham)
+            .input('Ten_san_pham', sql.NVarChar(100), formData.Ten_san_pham)
+            .input('Gia_ca', sql.Int, formData.Gia_ca)
+            .input('Mo_ta_san_pham', sql.NVarChar(100), formData.Mo_ta_san_pham)
+            .input('Tinh_trang', sql.Bit, formData.Tinh_trang)
             .query(`
-                UPDATE SAN_PHAM
+                UPDATE San_pham
                 SET
-                TEN_SAN_PHAM = @TEN_SAN_PHAM,
-                GIA_CA = @GIA_CA,
-                MO_TA = @MO_TA,
-                LOAI_SAN_PHAM = @LOAI_SAN_PHAM,
-                TINH_TRANG = @TINH_TRANG
+                Ten_san_pham = @Ten_san_pham,
+                Gia_ca = @Gia_ca,
+                Mo_ta_san_pham = @Mo_ta_san_pham,
+                Tinh_trang = @Tinh_trang
                 WHERE
-                MA_SAN_PHAM = @MA_SAN_PHAM
+                Ma_san_pham = @Ma_san_pham
             `);
     } catch (e) {
+        console.log(e);
+    }
+}
+
+const account = async(data) =>{
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('taikhoan', sql.NVarChar(100), data.username)
+            .input('matkhau',sql.NVarChar(255),  data.password)
+            .query(
+                `SELECT Nd.Ma_nguoi_dung, Nd.Ho_ten
+                FROM Tai_khoan Tk
+                JOIN Nguoi_dung Nd ON Tk.Ma_nguoi_dung = Nd.Ma_nguoi_dung
+                WHERE Tk.Tai_khoan = @taikhoan AND Tk.Mat_khau = @matkhau`
+            );
+        return result
+    }
+    catch (e){
+        console.log(e);
+    }
+}
+
+const laydonhang = async(data) =>{
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('id', sql.NVarChar(100), data.id)
+            .query(
+                `EXEC TruyXuatDonHangTheoKhachHang @id`
+            );
+        return result
+    }
+    catch (e){
+        console.log(e);
+    }
+}
+const laybaocao = async(data) =>{
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('id', sql.NVarChar(100), data.id)
+            .query(
+                `EXEC GetSalesReport @startDate='2021-01-01 00:00:00', @endDate='2023-12-31 23:59:59', @doanhThuNguong=54321`
+            );
+        return result
+    }
+    catch (e){
         console.log(e);
     }
 }
@@ -56,5 +111,8 @@ const updateitem = async(formData) =>{
 module.exports={
     getitemdata,
     updateitem,
-    additem
+    additem,
+    account,
+    laydonhang,
+    laybaocao
 }
